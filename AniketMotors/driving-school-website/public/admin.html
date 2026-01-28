@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang='en'>
+<head>
+  <meta charset='utf-8'/>
+  <meta name='viewport' content='width=device-width,initial-scale=1'/>
+  <title>Admin — Aniket Motor Training School</title>
+  <link rel='stylesheet' href='/styles.css'>
+</head>
+<body class="admin-page">
+<header class='site-header'>
+  <div class='container1'>
+    <h1>Aniket Motor Training School - Admin Portal</h1>
+    <nav>
+      <a href='/index.html'>Public Site</a>
+      <a href='/admin.html'>Admin</a>
+    </nav>
+  </div>
+</header>
+<main class='container'>
+  <div id='loginBox' class='card'>
+    <h2>Admin Login</h2>
+    <form id='loginForm'>
+      <div class='grid'>
+        <label>Username<input name='username' required autocomplete='username'></label>
+        <label>Password<input type='password' name='password' required autocomplete='current-password'></label>
+      </div>
+      <button type='submit'>Login</button>
+    </form>
+    <div id='loginMessage'></div>
+  </div>
+
+  <div id='adminPanel' style='display:none'>
+    <!-- Dashboard Header -->
+    <div class='dashboard-header'>
+      <div>
+        <h1 style='margin: 0; color: var(--white); font-size: 2em;'>Dashboard</h1>
+        <p style='margin: 4px 0 0 0; color: var(--text-light);'>Welcome to Aniket Motor Training School Admin Portal</p>
+      </div>
+      <div style='display:flex;gap:12px;align-items:center;flex-wrap:wrap'>
+        <button id='refreshBtn' style='background: var(--color-light); color: var(--text-dark);'>🔄 Refresh</button>
+        <button id='logoutBtn'>🚪 Logout</button>
+      </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class='stats-grid'>
+      <div class='stat-card clickable-stat' data-stat='total'>
+        <div class='stat-icon' style='background: rgba(200, 208, 222, 0.2);'>📅</div>
+        <div class='stat-content'>
+          <div class='stat-value' id='statTotalAppointments'>0</div>
+          <div class='stat-label'>Total Appointments</div>
+        </div>
+        <button class='stat-info-btn' title='View Details'>ℹ️</button>
+      </div>
+      <div class='stat-card clickable-stat' data-stat='confirmed'>
+        <div class='stat-icon' style='background: rgba(156, 163, 175, 0.2);'>✅</div>
+        <div class='stat-content'>
+          <div class='stat-value' id='statConfirmed'>0</div>
+          <div class='stat-label'>Confirmed</div>
+        </div>
+        <button class='stat-info-btn' title='View Details'>ℹ️</button>
+      </div>
+      <div class='stat-card clickable-stat' data-stat='pending'>
+        <div class='stat-icon' style='background: rgba(156, 163, 175, 0.2);'>⏳</div>
+        <div class='stat-content'>
+          <div class='stat-value' id='statPending'>0</div>
+          <div class='stat-label'>Pending</div>
+        </div>
+        <button class='stat-info-btn' title='View Details'>ℹ️</button>
+      </div>
+      <div class='stat-card clickable-stat' data-stat='vehicles'>
+        <div class='stat-icon' style='background: rgba(156, 163, 175, 0.2);'>🚗</div>
+        <div class='stat-content'>
+          <div class='stat-value' id='statVehicles'>0</div>
+          <div class='stat-label'>Active Vehicles</div>
+        </div>
+        <button class='stat-info-btn' title='View Details'>ℹ️</button>
+      </div>
+      <div class='stat-card clickable-stat' data-stat='trainers'>
+        <div class='stat-icon' style='background: rgba(156, 163, 175, 0.2);'>👨‍🏫</div>
+        <div class='stat-content'>
+          <div class='stat-value' id='statTrainers'>0</div>
+          <div class='stat-label'>Active Trainers</div>
+        </div>
+        <button class='stat-info-btn' title='View Details'>ℹ️</button>
+      </div>
+      <div class='stat-card clickable-stat' data-stat='today'>
+        <div class='stat-icon' style='background: rgba(156, 163, 175, 0.2);'>📊</div>
+        <div class='stat-content'>
+          <div class='stat-value' id='statTodayAppointments'>0</div>
+          <div class='stat-label'>Today's Appointments</div>
+        </div>
+        <button class='stat-info-btn' title='View Details'>ℹ️</button>
+      </div>
+    </div>
+
+    <!-- Details Modal -->
+    <div id='statDetailsModal' class='stat-modal'>
+      <div class='stat-modal-content'>
+        <div class='stat-modal-header'>
+          <h2 id='statModalTitle'>Details</h2>
+          <button class='stat-modal-close'>&times;</button>
+        </div>
+        <div class='stat-modal-body' id='statModalBody'>
+          Loading...
+        </div>
+      </div>
+    </div>
+
+    <!-- Dashboard Tabs -->
+    <div class='dashboard-tabs'>
+      <button class='tab-btn active' data-tab='appointments'>📅 Appointments</button>
+      <button class='tab-btn' data-tab='vehicles'>🚗 Vehicles</button>
+      <button class='tab-btn' data-tab='trainers'>👨‍🏫 Trainers</button>
+      <button class='tab-btn' data-tab='location'>📍 Location</button>
+    </div>
+
+    <!-- Tab Content -->
+    <div class='tab-content active' id='tab-appointments'>
+      <div class='card'>
+        <div style='display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:12px'>
+          <h2 style='margin:0;'>Appointments Management</h2>
+          <div style='display:flex;gap:8px;flex-wrap:wrap'>
+            <select id='filterStatus' style='padding:8px 12px;border-radius:6px;border:2px solid var(--color-light);background:var(--white);color:var(--text-dark);'>
+              <option value='all'>All Status</option>
+              <option value='pending'>Pending</option>
+              <option value='confirmed'>Confirmed</option>
+              <option value='cancelled'>Cancelled</option>
+            </select>
+          </div>
+        </div>
+        <div id='appointmentsList'>Loading...</div>
+      </div>
+    </div>
+
+    <div class='tab-content' id='tab-vehicles'>
+      <div class='card'>
+        <h2 style='margin:0 0 20px 0;'>Vehicle Management</h2>
+        <div id='vehiclesList' style='margin-bottom: 24px;'>
+          <div class='small' style='color: var(--text-medium);'>Loading vehicles...</div>
+        </div>
+        <div style='border-top: 2px solid var(--color-light); padding-top: 24px;'>
+          <h3 style='margin:0 0 16px 0;'>Add New Vehicle</h3>
+          <form id='vehicleForm'>
+            <div class='grid'>
+              <label>Vehicle Name<input name='name' required placeholder='e.g., Honda City'></label>
+              <label>Vehicle Number<input name='number' required placeholder='e.g., DL-01-AB-1234'></label>
+            </div>
+            <div class='grid'>
+              <label>Type<input name='type' required placeholder='e.g., Sedan, Hatchback'></label>
+            </div>
+            <button type='submit'>Add Vehicle</button>
+          </form>
+          <div id='vehicleMessage'></div>
+        </div>
+      </div>
+    </div>
+
+    <div class='tab-content' id='tab-trainers'>
+      <div class='card'>
+        <h2 style='margin:0 0 20px 0;'>Trainer Management</h2>
+        <div id='trainersList' style='margin-bottom: 24px;'>
+          <div class='small' style='color: var(--text-medium);'>Loading trainers...</div>
+        </div>
+        <div style='border-top: 2px solid var(--color-light); padding-top: 24px;'>
+          <h3 style='margin:0 0 16px 0;'>Add New Trainer</h3>
+          <form id='trainerForm'>
+            <div class='grid'>
+              <label>Trainer Name<input name='name' required placeholder='e.g., Rajesh Kumar'></label>
+              <label>Phone<input name='phone' required placeholder='e.g., +91-98765-43210'></label>
+            </div>
+            <div class='grid'>
+              <label>Experience<input name='experience' placeholder='e.g., 10 years'></label>
+            </div>
+            <button type='submit'>Add Trainer</button>
+          </form>
+          <div id='trainerMessage'></div>
+        </div>
+      </div>
+    </div>
+
+    <div class='tab-content' id='tab-location'>
+      <div class='card'>
+        <h2 style='margin:0 0 20px 0;'>Location Management</h2>
+        <div id='currentLocation' style='background: var(--color-light); padding: 20px; border-radius: 8px; margin-bottom: 24px;'>
+          <h4 style='margin:0 0 12px 0; color: var(--color-primary);'>Current Location</h4>
+          <div id='currentLocationInfo' style='color: var(--text-medium);'>Loading...</div>
+        </div>
+        
+        <div style='margin: 24px 0;'>
+          <h4 style='margin:0 0 12px 0; color: var(--color-primary);'>Map Preview</h4>
+          <div class='map-container' style='height: 300px; margin-top: 12px;'>
+            <div id='adminMapPreview' class='map'>
+              <div style='padding: 40px; text-align: center; color: var(--text-medium);'>
+                Map will appear here after you set coordinates
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div style='border-top: 2px solid var(--color-light); padding-top: 24px;'>
+          <h3 style='margin:0 0 16px 0;'>Update Location</h3>
+          <form id='locationForm'>
+            <div class='grid'>
+              <label>Address<input name='address' required placeholder='Full address'></label>
+              <label>Phone<input name='phone' placeholder='Contact phone number'></label>
+            </div>
+            <div class='grid'>
+              <label>Latitude<input type='number' name='latitude' step='0.000001' required placeholder='e.g., 28.6139' id='latitudeInput'></label>
+              <label>Longitude<input type='number' name='longitude' step='0.000001' required placeholder='e.g., 77.2090' id='longitudeInput'></label>
+            </div>
+            <div class='grid'>
+              <label>Business Hours<input name='hours' placeholder='e.g., Mon-Fri: 9AM-6PM'></label>
+              <label>Map Zoom Level<input type='number' name='zoom' min='1' max='20' value='15' placeholder='1-20' id='zoomInput'></label>
+            </div>
+            <div style='margin-top: 16px; padding: 12px; background: var(--color-light); border-radius: 8px; font-size: 14px; color: var(--text-medium); border: 1px solid var(--color-secondary);'>
+              <strong>Tip:</strong> You can find coordinates using <a href='https://www.google.com/maps' target='_blank' style='color: var(--color-secondary);'>Google Maps</a> - Right click on a location and select coordinates, or use <a href='https://www.openstreetmap.org' target='_blank' style='color: var(--color-secondary);'>OpenStreetMap</a>.
+            </div>
+            <button type='submit'>Update Location</button>
+          </form>
+          <div id='locationMessage'></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+<footer class='site-footer'>
+  <div class='container'>© Aniket • Motors - Admin Portal</div>
+</footer>
+<script src='/admin.js'></script>
+</body></html>
